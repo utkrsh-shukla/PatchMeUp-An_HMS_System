@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Patient History - Admin{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4"><i class="bi bi-clock-history"></i> Patient Medical History</h2>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">Patient: {{ patient.name }}</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>ID:</strong> {{ patient.id }}</p>
+                    <p><strong>Email:</strong> {{ patient.user.email }}</p>
+                    <p><strong>Phone:</strong> {{ patient.phone or 'N/A' }}</p>
+                    <p><strong>Blood Group:</strong> {{ patient.blood_group or 'N/A' }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Date of Birth:</strong> {{ patient.date_of_birth.strftime('%b %d, %Y') if
+                        patient.date_of_birth else 'N/A' }}</p>
+                    <p><strong>Address:</strong> {{ patient.address or 'N/A' }}</p>
+                    <p><strong>Status:</strong>
+                        {% if patient.user.is_active %}
+                        <span class="badge bg-success">Active</span>
+                        {% else %}
+                        <span class="badge bg-secondary">Inactive</span>
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+            {% if patient.medical_history %}
+            <hr>
+            <p><strong>Medical History:</strong></p>
+            <p>{{ patient.medical_history }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">Visit History</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Visit Date</th>
+                            <th>Doctor Name</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Diagnosis</th>
+                            <th>Prescription</th>
+                            <th>Medicines</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for apt in appointments %}
+                        <tr>
+                            <td>{{ apt.date.strftime('%b %d, %Y') }} at {{ apt.time.strftime('%I:%M %p') }}</td>
+                            <td>{{ apt.doctor.name }}</td>
+                            <td>{{ apt.doctor.department.name if apt.doctor.department else 'N/A' }}</td>
+                            <td><span class="badge badge-{{ apt.status }}">{{ apt.status }}</span></td>
+                            <td>
+                                {% if apt.treatment %}
+                                {{ apt.treatment.diagnosis }}
+                                {% else %}
+                                <span class="text-muted">No treatment record</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if apt.treatment and apt.treatment.prescription %}
+                                {{ apt.treatment.prescription }}
+                                {% else %}
+                                <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if apt.treatment and apt.treatment.prescription %}
+                                {{ apt.treatment.prescription[:100] }}
+                                {% else %}
+                                <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">No visit history available</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <a href="{{ url_for('admin_patients.list_patients') }}" class="btn btn-secondary mt-3">Back to Patients</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

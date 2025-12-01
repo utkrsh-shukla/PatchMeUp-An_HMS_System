@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}All Appointments - Admin{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4"><i class="bi bi-calendar-check"></i> All Appointments</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th>Department</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for apt in appointments %}
+                        <tr>
+                            <td>{{ apt.id }}</td>
+                            <td>{{ apt.patient.name }}</td>
+                            <td>{{ apt.doctor.name }}</td>
+                            <td>{{ apt.doctor.department.name if apt.doctor.department else 'N/A' }}</td>
+                            <td>{{ apt.date.strftime('%b %d, %Y') }}</td>
+                            <td>{{ apt.time.strftime('%I:%M %p') }}</td>
+                            <td><span class="badge badge-{{ apt.status }}">{{ apt.status }}</span></td>
+                            <td>{{ apt.notes[:50] if apt.notes else '-' }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="8" class="text-center text-muted">No appointments found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

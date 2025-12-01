@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} - Admin{% endblock %}
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4">{{ title }}</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.name.label(class="form-label") }}
+                                {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else "")) }}
+                                {% if form.name.errors %}<div class="invalid-feedback">{% for error in form.name.errors %}{{ error }}{% endfor %}</div>{% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.email.label(class="form-label") }}
+                                {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
+                                {% if form.email.errors %}<div class="invalid-feedback">{% for error in form.email.errors %}{{ error }}{% endfor %}</div>{% endif %}
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            {{ form.password.label(class="form-label") }}
+                            {% if doctor %}<small class="text-muted d-block">Leave blank to keep current password</small>{% endif %}
+                            {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else "")) }}
+                            {% if form.password.errors %}<div class="invalid-feedback">{% for error in form.password.errors %}{{ error }}{% endfor %}</div>{% endif %}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.specialization.label(class="form-label") }}
+                                {{ form.specialization(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.department_id.label(class="form-label") }}
+                                {{ form.department_id(class="form-select") }}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.phone.label(class="form-label") }}
+                                {{ form.phone(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                {{ form.years_of_experience.label(class="form-label") }}
+                                {{ form.years_of_experience(class="form-control") }}
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <a href="{{ url_for('admin_doctors.list_doctors') }}" class="btn btn-secondary">Cancel</a>
+                            {{ form.submit(class="btn btn-primary") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
