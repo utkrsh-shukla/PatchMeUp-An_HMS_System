@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}Doctor Dashboard - PatchMeUp Hospital{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4"><i class="bi bi-person-badge"></i> Welcome, Dr. {{ doctor.name }}</h2>
+
+    <!-- Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-number">{{ total_appointments }}</div>
+                <div class="stat-label">Total Appointments</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-number">{{ completed }}</div>
+                <div class="stat-label">Completed</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="stat-card">
+                <div class="stat-number">{{ pending }}</div>
+                <div class="stat-label">Pending</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Today's Appointments -->
+    {% if today_appointments %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-calendar-day"></i> Today's Appointments</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Patient</th>
+                            <th>Phone</th>
+                            <th>Notes</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for apt in today_appointments %}
+                        <tr>
+                            <td>{{ apt.time.strftime('%I:%M %p') }}</td>
+                            <td>{{ apt.patient.name }}</td>
+                            <td>{{ apt.patient.phone or 'N/A' }}</td>
+                            <td>{{ apt.notes[:50] if apt.notes else '-' }}</td>
+                            <td><span class="badge badge-{{ apt.status }}">{{ apt.status }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Upcoming Appointments (Next 7 Days) -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="bi bi-calendar-week"></i> Upcoming Appointments (Next 7 Days)</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Patient</th>
+                            <th>Phone</th>
+                            <th>Notes</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for apt in upcoming_appointments %}
+                        <tr>
+                            <td>{{ apt.date.strftime('%b %d, %Y') }}</td>
+                            <td>{{ apt.time.strftime('%I:%M %p') }}</td>
+                            <td>{{ apt.patient.name }}</td>
+                            <td>{{ apt.patient.phone or 'N/A' }}</td>
+                            <td>{{ apt.notes[:30] if apt.notes else '-' }}</td>
+                            <td><span class="badge badge-{{ apt.status }}">{{ apt.status }}</span></td>
+                            <td>
+                                {% if apt.treatment %}
+                                <a href="{{ url_for('doctor_appointments.view_treatment', id=apt.treatment.id) }}"
+                                    class="btn btn-sm btn-info" title="View Treatment">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ url_for('doctor_appointments.edit_treatment', id=apt.treatment.id) }}"
+                                    class="btn btn-sm btn-warning" title="Edit Treatment">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                {% else %}
+                                <a href="{{ url_for('doctor_appointments.add_treatment', id=apt.id) }}"
+                                    class="btn btn-sm btn-primary" title="Add Treatment">
+                                    <i class="bi bi-file-medical"></i>
+                                </a>
+                                {% endif %}
+                                <a href="{{ url_for('doctor_appointments.patient_history', id=apt.patient.id) }}"
+                                    class="btn btn-sm btn-secondary" title="Patient History">
+                                    <i class="bi bi-clock-history"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">No upcoming appointments</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

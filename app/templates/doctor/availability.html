@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}My Availability - Doctor{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="bi bi-calendar-week"></i> My Availability Schedule</h2>
+        <a href="{{ url_for('doctor_availability.add_availability') }}" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Add Time Slot
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            {% for day in range(7) %}
+            <div class="mb-4">
+                <h5 class="text-danger">{{ get_day_name(day) }}</h5>
+                {% if day in weekly_schedule and weekly_schedule[day] %}
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for slot in weekly_schedule[day] %}
+                            <tr>
+                                <td>{{ slot.start_time.strftime('%I:%M %p') }}</td>
+                                <td>{{ slot.end_time.strftime('%I:%M %p') }}</td>
+                                <td>
+                                    {% if slot.is_available %}
+                                    <span class="badge bg-success">Available</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">Unavailable</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <form method="POST"
+                                        action="{{ url_for('doctor_availability.delete_availability', id=slot.id) }}"
+                                        class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">No availability set for this day</p>
+                {% endif %}
+            </div>
+            {% if day < 6 %}<hr>{% endif %}
+                {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

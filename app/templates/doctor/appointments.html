@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}My Appointments - Doctor{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4"><i class="bi bi-calendar-check"></i> My Appointments</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Patient</th>
+                            <th>Phone</th>
+                            <th>Notes</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for apt in appointments %}
+                        <tr>
+                            <td>{{ apt.date.strftime('%b %d, %Y') }}</td>
+                            <td>{{ apt.time.strftime('%I:%M %p') }}</td>
+                            <td>{{ apt.patient.name }}</td>
+                            <td>{{ apt.patient.phone or 'N/A' }}</td>
+                            <td>{{ apt.notes[:40] if apt.notes else '-' }}</td>
+                            <td><span class="badge badge-{{ apt.status }}">{{ apt.status }}</span></td>
+                            <td>
+                                {% if apt.treatment %}
+                                <a href="{{ url_for('doctor_appointments.view_treatment', id=apt.treatment.id) }}"
+                                    class="btn btn-sm btn-info" title="View Treatment">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ url_for('doctor_appointments.edit_treatment', id=apt.treatment.id) }}"
+                                    class="btn btn-sm btn-warning" title="Edit Treatment">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                {% else %}
+                                    {% if apt.status in ['booked', 'rescheduled'] %}
+                                    <a href="{{ url_for('doctor_appointments.add_treatment', id=apt.id) }}"
+                                        class="btn btn-sm btn-primary" title="Add Treatment">
+                                        <i class="bi bi-file-medical"></i>
+                                    </a>
+                                    {% endif %}
+                                {% endif %}
+                                
+                                {% if apt.status in ['booked', 'rescheduled'] %}
+                                <form method="POST"
+                                    action="{{ url_for('doctor_appointments.complete_appointment', id=apt.id) }}"
+                                    class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-success" title="Mark Complete">
+                                        <i class="bi bi-check-circle"></i>
+                                    </button>
+                                </form>
+                                <form method="POST"
+                                    action="{{ url_for('doctor_appointments.cancel_appointment', id=apt.id) }}"
+                                    class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Cancel">
+                                        <i class="bi bi-x-circle"></i>
+                                    </button>
+                                </form>
+                                {% endif %}
+                                
+                                <a href="{{ url_for('doctor_appointments.patient_history', id=apt.patient.id) }}"
+                                    class="btn btn-sm btn-secondary" title="View Patient History">
+                                    <i class="bi bi-clock-history"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">No appointments found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Patient History - Doctor{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4"><i class="bi bi-clock-history"></i> Patient Medical History</h2>
+
+    <div class="card mb-4">
+        <div class="card-header">Patient Information</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Name:</strong> {{ patient.name }}</p>
+                    <p><strong>Phone:</strong> {{ patient.phone or 'N/A' }}</p>
+                    <p><strong>Blood Group:</strong> {{ patient.blood_group or 'N/A' }}</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Date of Birth:</strong> {{ patient.date_of_birth.strftime('%b %d, %Y') if
+                        patient.date_of_birth else 'N/A' }}</p>
+                    <p><strong>Address:</strong> {{ patient.address or 'N/A' }}</p>
+                </div>
+            </div>
+            {% if patient.medical_history %}
+            <hr>
+            <p><strong>Medical History:</strong></p>
+            <p>{{ patient.medical_history }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">Appointment History</div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Status</th>
+                            <th>Diagnosis</th>
+                            <th>Prescription</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for apt in appointments %}
+                        <tr>
+                            <td>{{ apt.date.strftime('%b %d, %Y') }}</td>
+                            <td>{{ apt.time.strftime('%I:%M %p') }}</td>
+                            <td><span class="badge badge-{{ apt.status }}">{{ apt.status }}</span></td>
+                            <td>{{ apt.treatment.diagnosis[:50] + '...' if apt.treatment and apt.treatment.diagnosis|length > 50 else (apt.treatment.diagnosis if apt.treatment else 'N/A') }}</td>
+                            <td>{{ apt.treatment.prescription[:50] + '...' if apt.treatment and apt.treatment.prescription and apt.treatment.prescription|length > 50 else (apt.treatment.prescription if apt.treatment and apt.treatment.prescription else 'N/A') }}</td>
+                            <td>
+                                {% if apt.treatment %}
+                                <a href="{{ url_for('doctor_appointments.view_treatment', id=apt.treatment.id) }}"
+                                    class="btn btn-sm btn-info" title="View Treatment">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ url_for('doctor_appointments.edit_treatment', id=apt.treatment.id) }}"
+                                    class="btn btn-sm btn-warning" title="Edit Treatment">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                {% else %}
+                                    {% if apt.status in ['booked', 'rescheduled', 'completed'] %}
+                                    <a href="{{ url_for('doctor_appointments.add_treatment', id=apt.id) }}"
+                                        class="btn btn-sm btn-primary" title="Add Treatment">
+                                        <i class="bi bi-file-medical"></i>
+                                    </a>
+                                    {% else %}
+                                    <span class="text-muted">No treatment</span>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center text-muted">No appointment history</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
