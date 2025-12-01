@@ -1,0 +1,244 @@
+/* Hospital Management System - Custom Theme */
+
+:root {
+    --primary-red: #DC143C;
+    --dark-red: #8B0000;
+    --beige: #F5F5DC;
+    --beige-dark: #E8D5B7;
+    --beige-light: #FDFBF7;
+    --text-dark: #2c3e50;
+    --text-light: #6c757d;
+    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--beige-light);
+    color: var(--text-dark);
+}
+
+/* Navigation */
+.navbar {
+    background-color: var(--beige) !important;
+    box-shadow: var(--shadow);
+    border-bottom: 3px solid var(--primary-red);
+}
+
+.navbar-brand {
+    color: var(--primary-red) !important;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    color: var(--text-dark) !important;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: var(--primary-red) !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-red);
+    border-color: var(--primary-red);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--dark-red);
+    border-color: var(--dark-red);
+}
+
+.btn-secondary {
+    background-color: var(--beige-dark);
+    border-color: var(--beige-dark);
+    color: var(--text-dark);
+}
+
+.btn-secondary:hover {
+    background-color: #D4C5A9;
+    border-color: #D4C5A9;
+}
+
+/* Cards */
+.card {
+    border: none;
+    box-shadow: var(--shadow);
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    background-color: white;
+}
+
+.card-header {
+    background-color: var(--beige);
+    border-bottom: 2px solid var(--primary-red);
+    font-weight: 600;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.card-stats {
+    border-left: 4px solid var(--primary-red);
+}
+
+.card-stats h3 {
+    color: var(--primary-red);
+    font-weight: bold;
+}
+
+/* Tables */
+.table {
+    background-color: white;
+}
+
+.table thead th {
+    background-color: var(--beige);
+    color: var(--text-dark);
+    border-bottom: 2px solid var(--primary-red);
+    font-weight: 600;
+}
+
+.table-hover tbody tr:hover {
+    background-color: var(--beige-light);
+}
+
+/* Forms */
+.form-control:focus {
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 0.2rem rgba(220, 20, 60, 0.25);
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+/* Alerts */
+.alert-success {
+    background-color: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    border-color: var(--primary-red);
+    color: var(--dark-red);
+}
+
+.alert-info {
+    background-color: var(--beige-light);
+    border-color: var(--beige-dark);
+    color: var(--text-dark);
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    border-color: #ffc107;
+    color: #856404;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, var(--beige) 0%, var(--beige-dark) 100%);
+    padding: 4rem 0;
+    border-bottom: 4px solid var(--primary-red);
+}
+
+.hero-title {
+    color: var(--primary-red);
+    font-weight: bold;
+    font-size: 2.5rem;
+}
+
+.hero-subtitle {
+    color: var(--text-dark);
+    font-size: 1.2rem;
+}
+
+/* Feature Cards */
+.feature-card {
+    transition: transform 0.3s;
+    border: 2px solid var(--beige);
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-red);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: var(--primary-red);
+}
+
+/* Badges */
+.badge-booked {
+    background-color: #17a2b8;
+}
+
+.badge-completed {
+    background-color: #28a745;
+}
+
+.badge-cancelled {
+    background-color: #6c757d;
+}
+
+.badge-rescheduled {
+    background-color: #ffc107;
+    color: var(--text-dark);
+}
+
+/* Footer */
+.footer {
+    background-color: var(--beige);
+    border-top: 3px solid var(--primary-red);
+    padding: 2rem 0;
+    margin-top: 3rem;
+    color: var(--text-dark);
+}
+
+.footer a {
+    color: var(--primary-red);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: var(--dark-red);
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+}
+
+/* Dashboard specific styles */
+.stat-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    border-left: 4px solid var(--primary-red);
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--primary-red);
+}
+
+.stat-label {
+    color: var(--text-light);
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
