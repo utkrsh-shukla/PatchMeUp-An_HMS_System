@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}{{ doctor.name }} - Doctor Details{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h2 class="mb-4"><i class="bi bi-person-badge"></i> Dr. {{ doctor.name }}</h2>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-header">Doctor Information</div>
+                <div class="card-body">
+                    <p><strong>Specialization:</strong> {{ doctor.specialization }}</p>
+                    <p><strong>Department:</strong> {{ doctor.department.name if doctor.department else 'N/A' }}</p>
+                    <p><strong>Experience:</strong> {{ doctor.years_of_experience }} years</p>
+                    <p><strong>Phone:</strong> {{ doctor.phone or 'N/A' }}</p>
+                    <p><strong>Email:</strong> {{ doctor.user.email }}</p>
+                    <hr>
+                    <a href="{{ url_for('patient_appointments.book_appointment', doctor_id=doctor.id) }}"
+                        class="btn btn-primary w-100">
+                        <i class="bi bi-calendar-plus"></i> Book Appointment
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">7-Day Availability Schedule</h5>
+                </div>
+                <div class="card-body">
+                    {% for day in next_days %}
+                    <div class="mb-3">
+                        <h6 class="text-danger">{{ day.strftime('%A, %B %d, %Y') }}</h6>
+                        {% if day in availability_schedule and availability_schedule[day] %}
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for slot in availability_schedule[day] %}
+                            <span class="badge bg-success">
+                                {{ slot.start_time.strftime('%I:%M %p') }} - {{ slot.end_time.strftime('%I:%M %p') }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <p class="text-muted mb-0">Not available</p>
+                        {% endif %}
+                    </div>
+                    {% if not loop.last %}
+                    <hr>{% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
