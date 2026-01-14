@@ -2,6 +2,10 @@
 
 A comprehensive Flask-based web application for hospital management with role-based access control for Admins, Doctors, and Patients. Features a professional beige and red themed interface with complete treatment management capabilities. Built with modularity in mind, featuring clear structure and organized code architecture.
 
+## S Grade (10 Grade Point) Capstone Project For Modern Application Development - 1 Course Under IIT Madras
+<img width="406" height="452" alt="image" src="https://github.com/user-attachments/assets/5cfa706f-67cd-4945-9aed-f15017248f7f" />
+
+
 ## 🏥 Features Overview
 
 ### 👨‍💼 Admin Features
